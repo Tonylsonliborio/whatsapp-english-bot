@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request
+from fastapi.responses import Response
 from twilio.twiml.messaging_response import MessagingResponse
 import openai
 import os
@@ -6,6 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
 app = FastAPI()
 
 @app.post("/whatsapp")
@@ -26,4 +28,6 @@ async def whatsapp_webhook(request: Request):
     twilio_response = MessagingResponse()
     twilio_response.message(bot_reply)
 
-    return str(twilio_response)
+    return Response(content=str(twilio_response), media_type="application/xml")
+
+
